@@ -1,105 +1,50 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import SplitText from "./SplitText";
-import CharacterSpot from "./CharacterSpot";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { siteConfig } from "@/lib/site-config";
 
-/**
- * HeroSection — Section 1.
- *
- * Layout from Flying Papers:
- * - Cream background, full viewport sticky section
- * - Small eyebrow heading at top ("I'm fly!")
- * - Large heading filling width ("Let me show you where we can go")
- * - Character floating below/between text
- * - Scroll drives: heading up, character down, all fades out
- * - Spacer is 300vh (200vh on desktop) for scroll length
- */
-
 export default function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(ref);
+  const p = useScrollProgress(ref);
   const { hero } = siteConfig;
 
   return (
-    <section
-      className="section-full"
-      style={{
-        backgroundColor: hero.bg,
-        color: hero.textColor,
-      }}
-    >
-      <div
-        ref={ref}
-        className="sticky-wrap"
-        style={{ minHeight: "280vh" }}
-      >
-        <div
-          className="sticky-inner"
-          style={{
-            flexDirection: "column",
-            gap: 0,
-            backgroundColor: hero.bg,
-          }}
-        >
-          {/* Eyebrow — small text above */}
-          <div
-            style={{
-              position: "absolute",
-              top: "12%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              opacity: Math.max(0, 1 - progress * 4),
-              zIndex: 2,
-            }}
-          >
-            <SplitText
-              lines={[hero.eyebrow]}
-              as="h3"
-              className="text-section"
-              staggerDelay={0.1}
-            />
+    <section style={{ background: hero.bg, color: hero.textColor }}>
+      <div ref={ref} className="sticky-outer">
+        <div className="sticky-inner" style={{ flexDirection: "column", background: hero.bg }}>
+
+          {/* Eyebrow */}
+          <div style={{
+            position: "absolute", top: "12%", width: "100%", textAlign: "center",
+            opacity: Math.max(0, 1 - p * 4), zIndex: 2,
+          }}>
+            <SplitText lines={[hero.eyebrow]} tag="h3" fontSize="8vw" stagger={0.1} />
           </div>
 
-          {/* Main heading — fills viewport width */}
-          <div
-            style={{
-              width: "92%",
-              maxWidth: "1400px",
-              textAlign: "center",
-              zIndex: 2,
-              transform: `translateY(${progress * -40}%)`,
-              opacity: Math.max(0, 1 - progress * 2.5),
-            }}
-          >
-            <SplitText
-              lines={hero.heading}
-              as="h2"
-              className="text-hero"
-              staggerDelay={0.03}
-            />
+          {/* Main heading */}
+          <div style={{
+            width: "90%", zIndex: 2,
+            transform: `translateY(${p * -30}%)`,
+            opacity: Math.max(0, 1 - p * 2),
+          }}>
+            <SplitText lines={hero.heading} fontSize="10vw" stagger={0.03} />
           </div>
 
-          {/* Character — positioned below heading */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "8%",
-              left: "50%",
-              transform: `translateX(-50%) translateY(${progress * 120}%)`,
-              opacity: Math.max(0, 1 - progress * 3),
-              zIndex: 1,
-              width: "clamp(12rem, 22vw, 30rem)",
-            }}
-          >
-            <CharacterSpot
-              src={hero.characterImage}
-              size={250}
-              color={hero.textColor}
-            />
-          </div>
+          {/* Character image spot */}
+          {hero.characterImage && (
+            <div style={{
+              position: "absolute", bottom: "8%", left: "50%",
+              transform: `translateX(-50%) translateY(${p * 100}%)`,
+              opacity: Math.max(0, 1 - p * 3),
+              zIndex: 1, width: "clamp(120px, 20vw, 300px)",
+            }}>
+              <Image src={hero.characterImage} alt="" width={300} height={300}
+                style={{ width: "100%", height: "auto" }} priority />
+            </div>
+          )}
 
           <div className="dot-pattern" />
         </div>

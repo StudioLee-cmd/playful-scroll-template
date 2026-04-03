@@ -6,100 +6,74 @@ import { motion, useInView } from "framer-motion";
 /**
  * SplitText — Word-by-word reveal animation.
  *
- * Exact replica of Flying Papers' text animation system:
- * - Each word is wrapped in an overflow:hidden container
- * - The word translates up from below with a slight rotation
- * - Words stagger with a delay between each
- * - Each line is a separate flex row
+ * Each line is a horizontal row. Each word in the line slides up from below.
+ * Two copies: static (invisible, holds space) + animated (positioned over it).
  *
- * lines = array of arrays: [["Let", "me", "show"], ["you", "where"]]
+ * fontSize: pass a CSS value like "12vw" or "8rem"
  */
 
 interface SplitTextProps {
   lines: string[][];
-  as?: "h1" | "h2" | "h3" | "h4" | "p" | "span";
+  tag?: "h1" | "h2" | "h3" | "p";
+  fontSize?: string;
   className?: string;
-  staggerDelay?: number;
+  stagger?: number;
   once?: boolean;
 }
 
 export default function SplitText({
   lines,
-  as: Tag = "h2",
+  tag: Tag = "h2",
+  fontSize = "10vw",
   className = "",
-  staggerDelay = 0.05,
+  stagger = 0.04,
   once = true,
 }: SplitTextProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.3 });
-
-  let wordIndex = 0;
+  const inView = useInView(ref, { once, amount: 0.3 });
+  let wordIdx = 0;
 
   return (
     <Tag
       ref={ref}
-      className={`heading-display ${className}`}
-      style={{ opacity: isInView ? 1 : 0.01 }}
+      className={`display-text ${className}`}
+      style={{ fontSize }}
     >
-      {lines.map((line, lineIdx) => (
-        <span
-          key={lineIdx}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "0.2em",
-            flexWrap: "wrap",
-          }}
-        >
-          {line.map((word) => {
-            const i = wordIndex++;
+      {lines.map((words, lineIdx) => (
+        <span key={lineIdx} className="display-line">
+          {words.map((word) => {
+            const i = wordIdx++;
             return (
               <span
-                key={`${lineIdx}-${word}-${i}`}
-                className="split-word"
+                key={`${lineIdx}-${i}`}
                 style={{
                   display: "inline-block",
                   overflow: "hidden",
+                  position: "relative",
                   lineHeight: "inherit",
                 }}
               >
-                {/* Static copy (for layout) */}
-                <span
-                  style={{
-                    visibility: "hidden",
-                    display: "inline-block",
-                  }}
-                >
-                  {word}
-                </span>
-                {/* Animated copy (absolute positioned over static) */}
+                {/* Static copy for layout */}
+                <span style={{ visibility: "hidden" }}>{word}</span>
+                {/* Animated copy */}
                 <motion.span
-                  className="split-word-inner"
                   style={{
                     position: "absolute",
                     top: 0,
                     left: 0,
                     display: "inline-block",
+                    willChange: "transform",
                   }}
-                  initial={{
-                    y: "110%",
-                    rotate: 8,
-                  }}
+                  initial={{ y: "115%", rotate: 6 }}
                   animate={
-                    isInView
-                      ? {
-                          y: "0%",
-                          rotate: 0,
-                        }
-                      : {
-                          y: "110%",
-                          rotate: 8,
-                        }
+                    inView
+                      ? { y: "0%", rotate: 0 }
+                      : { y: "115%", rotate: 6 }
                   }
                   transition={{
-                    duration: 0.6,
+                    duration: 0.55,
                     ease: [0.16, 1, 0.3, 1],
-                    delay: i * staggerDelay,
+                    delay: i * stagger,
                   }}
                 >
                   {word}

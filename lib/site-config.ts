@@ -23,18 +23,6 @@ export const siteConfig = {
     lightGreen: "#B5C995",
   },
 
-  /* --- AGE GATE (first screen overlay) --- */
-  ageGate: {
-    enabled: true,
-    heading: ["HOW OLD", "ARE YOU?"],
-    confirmText: "I'm over 18, let me in",
-    denyText: "I'm not over 18 yet",
-    denyHref: "https://www.google.com",
-    bg: "#61609A",
-    textColor: "#F4ED36",
-    characterImage: "", // Add character image peeking between text
-  },
-
   /* --- SECTION 1: HERO --- */
   hero: {
     eyebrow: ["I'm", "fly!"],

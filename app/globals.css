@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ==========================================================================
-   PLAYFUL SCROLL TEMPLATE — Faithful to Flying Papers
-   ========================================================================== */
-
 :root {
   --color-cream: #F9F5F2;
   --color-purple: #8584BD;
@@ -21,124 +17,37 @@
   --color-light-green: #B5C995;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: 10px;
-  overscroll-behavior: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: var(--font-body), sans-serif;
-  background-color: var(--color-cream);
-  color: var(--color-dark);
-  overflow-x: hidden;
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 10px; overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-body), sans-serif; font-size: 1.6rem; background: var(--color-cream); color: var(--color-dark); overflow-x: hidden; }
 a { color: inherit; text-decoration: none; }
 
-/* ==========================================================================
-   TYPOGRAPHY — Viewport-filling display text
-   The original uses ObviouslyVariable at weight 800, line-height 80%,
-   uppercase, with sizes up to 58rem (580px). The text FILLS the viewport.
-   ========================================================================== */
-
+/* ===== TYPOGRAPHY — Matches original system ===== */
 .display-text {
   font-family: var(--font-display), sans-serif;
-  font-weight: 900;
-  line-height: 0.85;
+  font-weight: 800;
+  line-height: 0.88;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  letter-spacing: -0.01em;
   text-align: center;
 }
 
-/* Viewport-filling sizes — text spans the full width */
-.text-mega {
-  font-size: clamp(8rem, 18vw, 30rem);
-}
-
-.text-hero {
-  font-size: clamp(6rem, 14vw, 25rem);
-}
-
-.text-section {
-  font-size: clamp(4.5rem, 10vw, 18rem);
-}
-
-.text-sub {
-  font-size: clamp(3rem, 7vw, 12rem);
-}
-
-/* The yellow text shadow/outline effect from the original */
-.text-shadow-dark {
-  text-shadow:
-    3px 3px 0 var(--color-dark),
-    -1px -1px 0 var(--color-dark),
-    1px -1px 0 var(--color-dark),
-    -1px 1px 0 var(--color-dark),
-    0 4px 0 var(--color-dark);
-}
-
-/* Body/UI typography */
-.text-button {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 900;
-  font-size: 1.6rem;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.text-label {
-  font-family: var(--font-body), sans-serif;
-  font-weight: 700;
-  font-size: 1.8rem;
-  line-height: 1;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.text-tag {
-  font-family: var(--font-mono), monospace;
-  font-weight: 700;
-  font-size: 1.2rem;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.text-small {
-  font-family: var(--font-mono), monospace;
-  font-weight: 400;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* ==========================================================================
-   SECTIONS — Full-viewport color blocks
-   ========================================================================== */
-
-.section-full {
-  position: relative;
+/* A single visual line of heading text */
+.display-line {
+  display: flex;
+  justify-content: center;
+  gap: 0.12em;
   width: 100%;
-  overflow: hidden;
 }
 
-/* Sticky scroll container */
-.sticky-wrap {
+/* ===== STICKY SCROLL — Exact same mechanics as original ===== */
+.sticky-outer {
   position: relative;
+  min-height: 300vh;
 }
-
+@media (min-width: 1024px) {
+  .sticky-outer { min-height: 200vh; }
+}
 .sticky-inner {
   position: sticky;
   top: 0;
@@ -150,220 +59,160 @@ a { color: inherit; text-decoration: none; }
   justify-content: center;
 }
 
-/* ==========================================================================
-   CARDS — 3px dark border, colored backgrounds
-   ========================================================================== */
-
-.card {
+/* ===== CARDS — 3px border, exact original values ===== */
+.fp-card {
   border: 3px solid var(--color-dark);
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   width: 100%;
   height: 100%;
-  padding: 1.7rem;
-  text-decoration: none;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 1.2rem;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+@media (min-width: 1024px) { .fp-card { padding: 1.7rem; } }
+.fp-card:hover { transform: scale(1.03); }
 
-.card:hover {
-  transform: scale(1.03);
-}
-
-.card-content {
+.fp-card-content {
   position: relative;
   z-index: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: space-between;
+  flex-direction: column;
   text-align: center;
   height: 100%;
-  gap: 2rem;
-  padding: 1.5rem 1rem 2.5rem;
+  padding: 1.5rem 1.1rem 2rem;
+  gap: 2.25rem;
+}
+@media (min-width: 1024px) {
+  .fp-card-content {
+    align-items: center;
+    gap: 3rem;
+    padding: 1.4rem 1.7rem 3.7rem;
+    justify-content: flex-start;
+  }
 }
 
-/* ==========================================================================
-   HORIZONTAL SLIDER — Drag/touch carousel
-   ========================================================================== */
-
-.slider-viewport {
+/* ===== SLIDER — Touch drag carousel, original sizes ===== */
+.fp-slider {
+  position: relative;
   width: 100%;
   max-width: 100vw;
   overflow: hidden;
 }
-
-.slider-track {
+.fp-slider-track {
   display: flex;
   overflow-x: auto;
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
-  gap: 2rem;
-  padding: 0 4rem;
-  -ms-overflow-style: none;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.fp-slider-track::-webkit-scrollbar { display: none; }
+.fp-slider-track:active { cursor: grabbing; }
 
-.slider-track::-webkit-scrollbar { display: none; }
-.slider-track:active { cursor: grabbing; }
-
-.slider-item {
-  flex: 0 0 22rem;
-  height: 32rem;
+.fp-slider-item {
+  flex: 0 0 21rem;
+  user-select: none;
 }
-
+.fp-slider-item:first-of-type { margin-left: 4rem; }
+.fp-slider-item:last-of-type { margin-right: 4rem; }
 @media (min-width: 1024px) {
-  .slider-item { flex: 0 0 28rem; height: 38rem; }
+  .fp-slider-item { flex: 0 0 28.4rem; }
 }
 
-/* ==========================================================================
-   BUTTONS
-   ========================================================================== */
+/* ===== SECTION COLOR TRANSITION ===== */
+.color-transition {
+  transition: color 1s ease-in-out, background-color 1s ease-in-out;
+}
 
-.btn {
+/* ===== HEADER BAR — bordered pill, exact original ===== */
+.fp-header {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 11;
+  pointer-events: none;
+}
+.fp-header-bar {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  max-width: 34.5rem;
+  width: calc(100vw - 3rem);
+  height: 4rem;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 3px solid var(--color-dark);
+  background: var(--color-cream);
+  pointer-events: auto;
+  padding: 0 1.5rem;
+}
+
+/* ===== BUTTONS ===== */
+.fp-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.8rem 4rem;
+  padding: 1.4rem 3rem;
   font-family: var(--font-display), sans-serif;
-  font-weight: 900;
+  font-weight: 800;
   font-size: 1.4rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  text-decoration: none;
+  letter-spacing: 0.06em;
   cursor: pointer;
-  border: none;
+  border: 3px solid var(--color-dark);
+  text-decoration: none;
   transition: transform 0.2s ease;
 }
+.fp-btn:hover { transform: scale(1.04); }
 
-.btn:hover { transform: scale(1.05); }
-.btn:active { transform: scale(0.97); }
-
-.btn-solid {
-  background: var(--color-yellow);
-  color: var(--color-dark);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: inherit;
-  opacity: 0.7;
-  font-family: var(--font-mono), monospace;
-  font-weight: 400;
-  font-size: 1.1rem;
-  padding: 1rem 2rem;
-}
-
-.btn-ghost:hover { opacity: 1; }
-
-/* ==========================================================================
-   ANIMATED PLACEHOLDER — Rolling circle for character spots
-   ========================================================================== */
-
-@keyframes placeholderBounce {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-15px) rotate(90deg); }
-  50% { transform: translateY(0) rotate(180deg); }
-  75% { transform: translateY(-8px) rotate(270deg); }
-}
-
-@keyframes placeholderPulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); }
-}
-
-.placeholder-character {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.placeholder-circle {
-  border-radius: 50%;
-  border: 3px dashed currentColor;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: placeholderPulse 3s ease-in-out infinite;
-  position: relative;
-}
-
-.placeholder-circle::after {
-  content: '';
-  width: 40%;
-  height: 40%;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.3;
-  animation: placeholderBounce 2s ease-in-out infinite;
-}
-
-/* ==========================================================================
-   FLOATING ANIMATION
-   ========================================================================== */
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(8px, -5px); }
-  66% { transform: translate(-5px, 8px); }
-}
-
-.floating {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* ==========================================================================
-   DOT PATTERN OVERLAY
-   ========================================================================== */
-
+/* ===== DOT PATTERN ===== */
 .dot-pattern {
   position: absolute;
-  inset: -20px;
+  inset: 0;
   pointer-events: none;
   background-image:
     radial-gradient(var(--color-dark) 25%, transparent 25%),
     radial-gradient(var(--color-dark) 25%, transparent 25%);
   background-position: 0 0, 10px 10px;
   background-size: 4px 4px;
-  opacity: 0.06;
+  opacity: 0.04;
   z-index: 0;
 }
 
-/* ==========================================================================
-   AGE GATE OVERLAY
-   ========================================================================== */
-
-.age-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
+/* ===== CHARACTER SPOT — Clean empty zone, no ugly placeholder ===== */
+.character-spot {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  overflow: hidden;
+  border: 2px dashed currentColor;
+  border-radius: 50%;
+  opacity: 0.15;
 }
 
-.age-gate-text {
-  position: relative;
-  z-index: 2;
+/* ===== FLOATING ===== */
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(8px, 8px); }
 }
+.floating { animation: float 4s linear infinite; }
 
-.age-gate-character {
-  position: absolute;
-  z-index: 3;
-  /* Positioned between lines of text */
+/* ===== TAG TEXT ===== */
+.text-tag {
+  font-family: var(--font-mono), monospace;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
-
-.age-gate-actions {
-  position: relative;
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 3rem;
+.text-button {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
