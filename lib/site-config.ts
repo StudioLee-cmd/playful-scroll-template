@@ -1,15 +1,13 @@
 /* ==========================================================================
-   SITE CONFIG — Change this file to swap out all content
-   Everything the site displays comes from here.
+   SITE CONFIG — The ONLY file you edit per client.
+   All text, images, colors, and links live here.
    ========================================================================== */
 
 export const siteConfig = {
-  /* --- BRAND --- */
   name: "Flying Papers",
   tagline: "Your ticket to get there",
   url: "https://www.flyingpapers.com",
 
-  /* --- COLORS (override CSS vars) --- */
   colors: {
     cream: "#F9F5F2",
     purple: "#8584BD",
@@ -25,24 +23,32 @@ export const siteConfig = {
     lightGreen: "#B5C995",
   },
 
-  /* --- HERO SECTION --- */
+  /* --- AGE GATE (first screen overlay) --- */
+  ageGate: {
+    enabled: true,
+    heading: ["HOW OLD", "ARE YOU?"],
+    confirmText: "I'm over 18, let me in",
+    denyText: "I'm not over 18 yet",
+    denyHref: "https://www.google.com",
+    bg: "#61609A",
+    textColor: "#F4ED36",
+    characterImage: "", // Add character image peeking between text
+  },
+
+  /* --- SECTION 1: HERO --- */
   hero: {
-    // Small heading above
     eyebrow: ["I'm", "fly!"],
-    // Main heading lines (each array = one visual line)
     heading: [
       ["Let", "me", "show"],
       ["you", "where"],
       ["we", "can", "go"],
     ],
-    // Character image (floating illustration)
-    characterImage: "/images/character-hero.svg",
-    // Background color for this section
+    characterImage: "", // Floating character below heading
     bg: "#F9F5F2",
     textColor: "#1A1A1A",
   },
 
-  /* --- EXPLORE SLIDER SECTION --- */
+  /* --- SECTION 2: EXPLORE SLIDER --- */
   explore: {
     heading: [["Let's"], ["explore"], ["your"], ["options"]],
     bg: "#8584BD",
@@ -86,12 +92,10 @@ export const siteConfig = {
     ],
   },
 
-  /* --- SCROLL REVEAL SECTIONS (the sticky parallax ones) --- */
+  /* --- SECTIONS 3 & 4: SCROLL REVEAL (sticky parallax) --- */
   scrollSections: [
     {
-      // Text that shows before scroll reveals the real heading
       previewText: ["Consider", "looking for", "some third eye", "perspective?"],
-      // Real heading (word-by-word animated)
       heading: [
         ["Consider"],
         ["looking", "for"],
@@ -100,8 +104,7 @@ export const siteConfig = {
       ],
       bg: "#AC4F98",
       textColor: "#F9F5F2",
-      characterImage: "/images/character-section1.svg",
-      // Product cards that slide in
+      characterImage: "", // Character in background
       products: [
         {
           name: "Paper Rolls",
@@ -133,7 +136,7 @@ export const siteConfig = {
       ],
       bg: "#375027",
       textColor: "#F9F5F2",
-      characterImage: "/images/character-section2.svg",
+      characterImage: "", // Character in background
       products: [
         {
           name: "Filter Tips",
@@ -164,7 +167,7 @@ export const siteConfig = {
     },
   ],
 
-  /* --- BOTTOM SECTION --- */
+  /* --- SECTION 5: BOTTOM --- */
   bottom: {
     eyebrow: [
       ["Wherever", "you"],
@@ -177,10 +180,10 @@ export const siteConfig = {
     ],
     bg: "#A7B5CC",
     textColor: "#1A1A1A",
-    characterImage: "/images/character-bottom.svg",
+    characterImage: "", // Character rising from below
   },
 
-  /* --- FOOTER PROMO CARDS --- */
+  /* --- SECTION 6: FOOTER --- */
   footer: {
     bg: "#C94245",
     textColor: "#F8C1BA",
@@ -214,7 +217,7 @@ export const siteConfig = {
 
   /* --- HEADER / NAV --- */
   nav: {
-    logo: "/images/logo.svg",
+    logo: "",
     menuItems: [
       { label: "Shop All", href: "/categories/all" },
       { label: "About", href: "/about" },

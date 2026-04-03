@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans, Space_Mono } from "next/font/google";
+import { Syne, DM_Sans, Space_Mono } from "next/font/google";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+/* Syne — Bold, wide, geometric display font. Closest free match to ObviouslyVariable.
+   Swap this for the commercial ObviouslyVariable font for exact match. */
+const displayFont = Syne({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const bodyFont = DM_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const spaceMono = Space_Mono({
+const monoFont = Space_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: ["400", "700"],
@@ -37,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${dmSans.variable} ${spaceMono.variable}`}
+      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
     >
       <body>{children}</body>
     </html>

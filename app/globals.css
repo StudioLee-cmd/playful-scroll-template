@@ -3,11 +3,9 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   PLAYFUL SCROLL TEMPLATE — Global Styles
-   Extracted from Flying Papers design system
+   PLAYFUL SCROLL TEMPLATE — Faithful to Flying Papers
    ========================================================================== */
 
-/* --- COLOR SYSTEM (swap these per brand) --- */
 :root {
   --color-cream: #F9F5F2;
   --color-purple: #8584BD;
@@ -21,14 +19,8 @@
   --color-dark: #1A1A1A;
   --color-gold: #F9CC73;
   --color-light-green: #B5C995;
-
-  /* Font families — swap these for different brands */
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'Space Mono', monospace;
 }
 
-/* --- RESET & BASE --- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -36,97 +28,118 @@
 }
 
 html {
-  font-size: 10px; /* 1rem = 10px for easier scaling */
+  font-size: 10px;
   overscroll-behavior: none;
-  scroll-behavior: auto; /* JS handles smooth scroll */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   background-color: var(--color-cream);
   color: var(--color-dark);
   overflow-x: hidden;
-  line-height: 1.4;
 }
 
-/* --- TYPOGRAPHY SYSTEM --- */
-/* Display headings — massive, bold, uppercase, tight leading */
-.heading-display {
-  font-family: var(--font-display);
-  font-weight: 800;
+a { color: inherit; text-decoration: none; }
+
+/* ==========================================================================
+   TYPOGRAPHY — Viewport-filling display text
+   The original uses ObviouslyVariable at weight 800, line-height 80%,
+   uppercase, with sizes up to 58rem (580px). The text FILLS the viewport.
+   ========================================================================== */
+
+.display-text {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
   line-height: 0.85;
   text-transform: uppercase;
   letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* Size scale matching Flying Papers */
-.heading-h1 { font-size: clamp(6rem, 15vw, 58rem); }
-.heading-h2 { font-size: clamp(5rem, 12vw, 48rem); }
-.heading-h3 { font-size: clamp(4rem, 9vw, 35rem); }
-.heading-h4 { font-size: clamp(3.5rem, 8vw, 32rem); }
-.heading-h5 { font-size: clamp(3rem, 6vw, 28rem); }
-
-/* Body text styles */
-.text-label {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 2rem;
-  line-height: 0.9;
-  letter-spacing: 0.02em;
+/* Viewport-filling sizes — text spans the full width */
+.text-mega {
+  font-size: clamp(8rem, 18vw, 30rem);
 }
 
+.text-hero {
+  font-size: clamp(6rem, 14vw, 25rem);
+}
+
+.text-section {
+  font-size: clamp(4.5rem, 10vw, 18rem);
+}
+
+.text-sub {
+  font-size: clamp(3rem, 7vw, 12rem);
+}
+
+/* The yellow text shadow/outline effect from the original */
+.text-shadow-dark {
+  text-shadow:
+    3px 3px 0 var(--color-dark),
+    -1px -1px 0 var(--color-dark),
+    1px -1px 0 var(--color-dark),
+    -1px 1px 0 var(--color-dark),
+    0 4px 0 var(--color-dark);
+}
+
+/* Body/UI typography */
 .text-button {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.8rem;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 1.6rem;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+}
+
+.text-label {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .text-tag {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 1.4rem;
-  line-height: 0.8;
+  font-family: var(--font-mono), monospace;
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1;
   text-transform: uppercase;
-}
-
-.text-body {
-  font-family: var(--font-body);
-  font-size: 1.6rem;
-  line-height: 1.5;
+  letter-spacing: 0.08em;
 }
 
 .text-small {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 1.2rem;
-  line-height: 0.8;
+  font-family: var(--font-mono), monospace;
+  font-weight: 400;
+  font-size: 1.1rem;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* --- SPLIT TEXT ANIMATION --- */
-/* Each word has a visible copy and a hidden animated copy */
-.split-word {
-  display: inline-block;
+/* ==========================================================================
+   SECTIONS — Full-viewport color blocks
+   ========================================================================== */
+
+.section-full {
   position: relative;
+  width: 100%;
   overflow: hidden;
 }
 
-.split-word-inner {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* --- STICKY SCROLL SECTION --- */
-.sticky-section {
+/* Sticky scroll container */
+.sticky-wrap {
   position: relative;
 }
 
-.sticky-section__inner {
+.sticky-inner {
   position: sticky;
   top: 0;
   min-height: 100vh;
@@ -137,193 +150,220 @@ body {
   justify-content: center;
 }
 
-.sticky-section__spacer {
-  min-height: 300vh;
-}
+/* ==========================================================================
+   CARDS — 3px dark border, colored backgrounds
+   ========================================================================== */
 
-@media screen and (min-width: 1024px) {
-  .sticky-section__spacer {
-    min-height: 200vh;
-  }
-}
-
-/* --- HORIZONTAL SLIDER --- */
-.slider-track {
-  display: flex;
-  touch-action: pan-y;
-  user-select: none;
-  cursor: grab;
-  gap: 0;
-}
-
-.slider-track:active {
-  cursor: grabbing;
-}
-
-.slider-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* --- CARD SYSTEM --- */
 .card {
   border: 3px solid var(--color-dark);
   position: relative;
   overflow: hidden;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 1.2rem;
-  transition: transform 0.3s ease;
-}
-
-@media screen and (min-width: 1024px) {
-  .card {
-    padding: 1.7rem;
-  }
+  padding: 1.7rem;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
-.card__content {
+.card-content {
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
   height: 100%;
-  padding: 1.5rem 1.1rem 2rem;
-  gap: 2.25rem;
-  transition: inherit;
+  gap: 2rem;
+  padding: 1.5rem 1rem 2.5rem;
 }
 
-@media screen and (min-width: 1024px) {
-  .card__content {
-    align-items: center;
-    gap: 3rem;
-    padding: 1.4rem 1.7rem 3.7rem;
-    justify-content: flex-start;
-  }
-}
+/* ==========================================================================
+   HORIZONTAL SLIDER — Drag/touch carousel
+   ========================================================================== */
 
-/* --- FLOATING CHARACTER ANIMATION --- */
-@keyframes float {
-  0% { transform: translate(0px, 0px); }
-  50% { transform: translate(10px, 10px); }
-  100% { transform: translate(0px, 0px); }
-}
-
-.floating {
-  animation: float 4s linear infinite;
-}
-
-/* --- DOT PATTERN OVERLAY --- */
-.dot-pattern {
-  position: absolute;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
-  top: -20px;
-  left: -20px;
-  pointer-events: none;
-  background-image:
-    radial-gradient(var(--color-dark) 30%, transparent 30%),
-    radial-gradient(var(--color-dark) 30%, transparent 30%);
-  background-position: 0px 0px, 20px 20px;
-  background-size: 4px 4px;
-  opacity: 0.08;
-}
-
-/* --- COLOR SECTION TRANSITIONS --- */
-.color-section {
-  transition: color 1s ease-in-out, background-color 1s ease-in-out;
-}
-
-/* --- PRODUCT PANEL (slides in from right) --- */
-.product-panel {
-  transform: translateX(100%);
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.product-panel.visible {
-  transform: translateX(0%);
-}
-
-/* --- UNDERLINE DECORATION --- */
-.text-underline {
-  display: block;
-  height: 2px;
+.slider-viewport {
   width: 100%;
-  margin-top: 0.2em;
-  background-color: currentColor;
-}
-
-/* --- MASKED OVERFLOW (for text reveals) --- */
-.masked {
+  max-width: 100vw;
   overflow: hidden;
 }
 
-/* --- FULL-SCREEN OVERLAY (age gate etc) --- */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 12;
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  place-content: center;
-}
-
-/* --- UTILITY: hide scrollbar --- */
-.no-scrollbar {
+.slider-track {
+  display: flex;
+  overflow-x: auto;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  gap: 2rem;
+  padding: 0 4rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
 
-/* --- SLIDER ITEM SIZES --- */
+.slider-track::-webkit-scrollbar { display: none; }
+.slider-track:active { cursor: grabbing; }
+
 .slider-item {
-  flex: 0 0 21rem;
+  flex: 0 0 22rem;
+  height: 32rem;
 }
 
-.slider-item:first-of-type {
-  margin-left: 4rem;
+@media (min-width: 1024px) {
+  .slider-item { flex: 0 0 28rem; height: 38rem; }
 }
 
-.slider-item:last-of-type {
-  margin-right: 4rem;
-}
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
 
-@media screen and (min-width: 1024px) {
-  .slider-item {
-    flex: 0 0 28.4rem;
-  }
-}
-
-/* --- BUTTON STYLES --- */
-.btn-primary {
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.6rem 3.2rem;
-  border: 3px solid var(--color-dark);
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.8rem;
+  padding: 1.8rem 4rem;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  border: none;
+  transition: transform 0.2s ease;
 }
 
-.btn-primary:hover {
-  transform: scale(1.05);
+.btn:hover { transform: scale(1.05); }
+.btn:active { transform: scale(0.97); }
+
+.btn-solid {
+  background: var(--color-yellow);
+  color: var(--color-dark);
 }
 
-.btn-primary:active {
-  transform: scale(0.98);
+.btn-ghost {
+  background: transparent;
+  color: inherit;
+  opacity: 0.7;
+  font-family: var(--font-mono), monospace;
+  font-weight: 400;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+}
+
+.btn-ghost:hover { opacity: 1; }
+
+/* ==========================================================================
+   ANIMATED PLACEHOLDER — Rolling circle for character spots
+   ========================================================================== */
+
+@keyframes placeholderBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-15px) rotate(90deg); }
+  50% { transform: translateY(0) rotate(180deg); }
+  75% { transform: translateY(-8px) rotate(270deg); }
+}
+
+@keyframes placeholderPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.placeholder-character {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-circle {
+  border-radius: 50%;
+  border: 3px dashed currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: placeholderPulse 3s ease-in-out infinite;
+  position: relative;
+}
+
+.placeholder-circle::after {
+  content: '';
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  animation: placeholderBounce 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   FLOATING ANIMATION
+   ========================================================================== */
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(8px, -5px); }
+  66% { transform: translate(-5px, 8px); }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   DOT PATTERN OVERLAY
+   ========================================================================== */
+
+.dot-pattern {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+  background-image:
+    radial-gradient(var(--color-dark) 25%, transparent 25%),
+    radial-gradient(var(--color-dark) 25%, transparent 25%);
+  background-position: 0 0, 10px 10px;
+  background-size: 4px 4px;
+  opacity: 0.06;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   AGE GATE OVERLAY
+   ========================================================================== */
+
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.age-gate-text {
+  position: relative;
+  z-index: 2;
+}
+
+.age-gate-character {
+  position: absolute;
+  z-index: 3;
+  /* Positioned between lines of text */
+}
+
+.age-gate-actions {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
 }

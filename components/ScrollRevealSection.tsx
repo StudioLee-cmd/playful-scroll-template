@@ -1,28 +1,22 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
 import SplitText from "./SplitText";
-import FloatingCharacter from "./FloatingCharacter";
+import CharacterSpot from "./CharacterSpot";
 import Card from "./Card";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import Link from "next/link";
 
 /**
- * ScrollRevealSection — The sticky parallax sections from Flying Papers.
+ * ScrollRevealSection — Sections 3 & 4: Sticky parallax with product panel.
  *
- * How it works:
- * 1. Tall container (300vh) with sticky inner (100vh)
- * 2. Phase 1 (progress 0-0.3): Preview text visible, fades as you scroll
- * 3. Phase 2 (progress 0.3-0.6): Real heading animates in with split-text
- * 4. Phase 3 (progress 0.6-1.0): Product panel slides in from right,
- *    heading shifts left, character appears
- *
- * Each section has:
- * - Preview text (static, centered)
- * - Animated heading (split-text reveal)
- * - Floating character
- * - Product cards panel that slides in from the right
+ * Flying Papers mechanics:
+ * - 300vh container with sticky 100vh inner
+ * - Phase 1 (0-0.25): Static preview text centered, full opacity
+ * - Phase 2 (0.25-0.5): Preview fades, animated heading reveals
+ * - Phase 3 (0.5-1.0): Heading shifts left, product panel slides in from right
+ * - Character floats in the background
+ * - Each section has a bold single-color background
  */
 
 interface ScrollRevealSectionProps {
@@ -51,107 +45,105 @@ export default function ScrollRevealSection({
   products,
   shopAllHref,
 }: ScrollRevealSectionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(containerRef);
+  const ref = useRef<HTMLDivElement>(null);
+  const progress = useScrollProgress(ref);
 
-  // Phase calculations
-  const previewOpacity = Math.max(0, 1 - progress * 4);
-  const headingOpacity = progress > 0.15 ? Math.min(1, (progress - 0.15) * 5) : 0;
-  const headingX = progress > 0.5 ? -(progress - 0.5) * 60 : 0;
-  const panelX = progress > 0.4 ? Math.max(0, 100 - (progress - 0.4) * 200) : 100;
-  const characterOpacity = progress > 0.3 ? Math.min(1, (progress - 0.3) * 4) : 0;
+  // Phase calculations — smooth transitions
+  const phase1 = Math.max(0, 1 - progress * 5); // preview fades 0-0.2
+  const phase2 = progress > 0.15 ? Math.min(1, (progress - 0.15) * 4) : 0; // heading in
+  const phase3shift = progress > 0.45 ? Math.min(1, (progress - 0.45) * 3) : 0; // heading shifts left
+  const panelIn = progress > 0.4 ? Math.min(1, (progress - 0.4) * 2.5) : 0; // panel slides in
+  const charFade = progress > 0.2 ? Math.min(1, (progress - 0.2) * 3) : 0;
 
   return (
-    <section style={{ backgroundColor: bg, color: textColor }}>
-      <div ref={containerRef} style={{ minHeight: "300vh", position: "relative" }}>
+    <section className="section-full" style={{ backgroundColor: bg, color: textColor }}>
+      <div ref={ref} className="sticky-wrap" style={{ minHeight: "350vh" }}>
         <div
-          className="sticky-section__inner"
-          style={{
-            backgroundColor: bg,
-            color: textColor,
-            position: "relative",
-          }}
+          className="sticky-inner"
+          style={{ backgroundColor: bg, position: "relative" }}
         >
-          {/* Phase 1: Preview text (static, fades out) */}
+          {/* Phase 1: Preview text (static, centered, fades out) */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: phase1,
+              pointerEvents: phase1 < 0.1 ? "none" : "auto",
+              zIndex: 2,
+            }}
+          >
+            <div style={{ width: "85%", maxWidth: "1000px", textAlign: "center" }}>
+              {previewText.map((line, i) => (
+                <div
+                  key={i}
+                  className="display-text text-section"
+                  style={{ justifyContent: "center", lineHeight: 0.9 }}
+                >
+                  {line}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Phase 2: Animated heading (reveals, then shifts left in phase 3) */}
           <div
             style={{
               position: "absolute",
               top: "50%",
-              left: "50%",
+              left: `calc(50% - ${phase3shift * 25}%)`,
               transform: "translate(-50%, -50%)",
-              opacity: previewOpacity,
-              textAlign: "center",
               width: "80%",
-              pointerEvents: "none",
-            }}
-          >
-            {previewText.map((line, i) => (
-              <p
-                key={i}
-                className="heading-display heading-h3"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "0.1em",
-                }}
-              >
-                {line}
-              </p>
-            ))}
-          </div>
-
-          {/* Phase 2: Animated heading */}
-          <motion.div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              width: "80%",
-              opacity: headingOpacity,
-              transform: `translate(calc(-50% + ${headingX}%), -50%)`,
+              maxWidth: "1000px",
+              opacity: phase2,
               zIndex: 2,
             }}
           >
             <SplitText
               lines={heading}
               as="h2"
-              className="heading-h3"
+              className="text-section"
               staggerDelay={0.04}
               once={false}
             />
-          </motion.div>
+          </div>
 
-          {/* Floating character */}
-          {characterImage && (
+          {/* Character */}
+          {characterImage !== undefined && (
             <div
               style={{
                 position: "absolute",
-                left: "10%",
-                top: "20%",
-                opacity: characterOpacity,
-                width: "clamp(10rem, 20vw, 25rem)",
+                left: "8%",
+                top: "15%",
+                opacity: charFade,
+                width: "clamp(10rem, 16vw, 22rem)",
                 zIndex: 1,
               }}
             >
-              <FloatingCharacter src={characterImage} />
+              <CharacterSpot
+                src={characterImage}
+                size={180}
+                color={textColor}
+              />
             </div>
           )}
 
-          {/* Phase 3: Product panel slides in from right */}
+          {/* Phase 3: Product panel — slides in from right */}
           <div
             style={{
               position: "absolute",
               top: 0,
               right: 0,
-              width: "50%",
+              width: "45%",
               height: "100%",
-              transform: `translateX(${panelX}%)`,
-              transition: "none",
+              transform: `translateX(${(1 - panelIn) * 105}%)`,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              padding: "9rem 2.2rem 1.5rem 1.5rem",
+              padding: "8rem 3rem",
               zIndex: 3,
               gap: "2rem",
             }}
@@ -161,8 +153,8 @@ export default function ScrollRevealSection({
                 key={product.name}
                 style={{
                   width: "100%",
-                  maxWidth: "28rem",
-                  height: "22rem",
+                  maxWidth: "26rem",
+                  height: "24rem",
                 }}
               >
                 <Card
@@ -176,10 +168,9 @@ export default function ScrollRevealSection({
               </div>
             ))}
 
-            {/* Shop all button */}
             <Link
               href={shopAllHref}
-              className="btn-primary"
+              className="btn btn-solid"
               style={{
                 backgroundColor: textColor,
                 color: bg,
@@ -190,8 +181,7 @@ export default function ScrollRevealSection({
             </Link>
           </div>
 
-          {/* Dot pattern */}
-          <div className="dot-pattern" style={{ opacity: 0.03 }} />
+          <div className="dot-pattern" />
         </div>
       </div>
     </section>

@@ -2,37 +2,38 @@
 
 import { useRef } from "react";
 import SplitText from "./SplitText";
-import FloatingCharacter from "./FloatingCharacter";
+import CharacterSpot from "./CharacterSpot";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * BottomSection — "Wherever you want to go / Flying papers is your ticket to get there"
+ * BottomSection — Section 5: "Wherever you want to go / is your ticket to get there"
  *
- * Sticky scroll section with:
- * - Small eyebrow heading that appears first
- * - Large main heading
- * - Character that floats up from below
+ * Flying Papers layout:
+ * - Blue-grey background
+ * - Sticky scroll section
+ * - Small eyebrow heading appears first
+ * - Main heading reveals below
+ * - Character rises from below
  */
 
 export default function BottomSection() {
   const { bottom } = siteConfig;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(containerRef);
+  const ref = useRef<HTMLDivElement>(null);
+  const progress = useScrollProgress(ref);
 
-  const eyebrowOpacity = Math.max(0, 1 - progress * 3);
-  const headingOpacity = progress > 0.2 ? Math.min(1, (progress - 0.2) * 4) : 0;
-  const characterY = Math.max(0, 50 - progress * 100);
+  const eyebrowFade = Math.max(0, 1 - progress * 4);
+  const headingFade = progress > 0.15 ? Math.min(1, (progress - 0.15) * 4) : 0;
+  const charRise = Math.max(0, 60 - progress * 120);
 
   return (
-    <section style={{ backgroundColor: bottom.bg, color: bottom.textColor }}>
-      <div ref={containerRef} style={{ minHeight: "250vh", position: "relative" }}>
+    <section className="section-full" style={{ backgroundColor: bottom.bg, color: bottom.textColor }}>
+      <div ref={ref} className="sticky-wrap" style={{ minHeight: "280vh" }}>
         <div
-          className="sticky-section__inner"
+          className="sticky-inner"
           style={{
-            backgroundColor: bottom.bg,
-            color: bottom.textColor,
             flexDirection: "column",
+            backgroundColor: bottom.bg,
             position: "relative",
           }}
         >
@@ -40,55 +41,57 @@ export default function BottomSection() {
           <div
             style={{
               position: "absolute",
-              top: "20%",
-              width: "100%",
+              top: "18%",
+              width: "90%",
               textAlign: "center",
-              opacity: eyebrowOpacity,
+              opacity: eyebrowFade,
               zIndex: 2,
             }}
           >
             <SplitText
               lines={bottom.eyebrow}
               as="h3"
-              className="heading-h4"
-              staggerDelay={0.06}
+              className="text-sub"
+              staggerDelay={0.08}
             />
           </div>
 
           {/* Main heading */}
           <div
             style={{
-              position: "relative",
-              zIndex: 2,
-              opacity: headingOpacity,
-              width: "90%",
+              width: "92%",
+              maxWidth: "1400px",
               textAlign: "center",
+              opacity: headingFade,
+              zIndex: 2,
             }}
           >
             <SplitText
               lines={bottom.heading}
               as="h2"
-              className="heading-h2"
-              staggerDelay={0.04}
+              className="text-hero"
+              staggerDelay={0.03}
               once={false}
             />
           </div>
 
-          {/* Character floating up */}
-          {bottom.characterImage && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                left: "50%",
-                transform: `translateX(-50%) translateY(${characterY}vh)`,
-                width: "clamp(15rem, 25vw, 35rem)",
-                zIndex: 1,
-              }}
-            >
-              <FloatingCharacter src={bottom.characterImage} />
-            </div>
-          )}
+          {/* Character rising from below */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5%",
+              left: "50%",
+              transform: `translateX(-50%) translateY(${charRise}vh)`,
+              width: "clamp(14rem, 22vw, 32rem)",
+              zIndex: 1,
+            }}
+          >
+            <CharacterSpot
+              src={bottom.characterImage}
+              size={280}
+              color={bottom.textColor}
+            />
+          </div>
         </div>
       </div>
     </section>

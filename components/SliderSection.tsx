@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { motion } from "framer-motion";
 import SplitText from "./SplitText";
 import Card from "./Card";
 import { useDragSlider } from "@/hooks/useDragSlider";
@@ -8,25 +9,26 @@ import { useInView } from "@/hooks/useScrollProgress";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * SliderSection — "Let's explore your options" with horizontal drag slider.
+ * SliderSection — Section 2: "Let's explore your options"
  *
- * Matches Flying Papers:
- * - Full-height section with colored background
- * - Large heading at top with split-text reveal
- * - Horizontal draggable card carousel below
- * - Cards have 3px borders, colored backgrounds, icons
+ * Flying Papers layout:
+ * - Full viewport, colored background (purple)
+ * - Heading at top left, viewport-filling split-text
+ * - Below: horizontal drag slider with bordered category cards
+ * - Cards have icons, labels, and "Shop" CTA
+ * - Touch + mouse drag with momentum
  */
 
 export default function SliderSection() {
   const { explore } = siteConfig;
   const sectionRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(sectionRef, 0.1);
+  const inView = useInView(sectionRef, 0.05);
   const { trackRef, isDragging, handlers } = useDragSlider();
 
   return (
     <section
       ref={sectionRef}
-      className="color-section"
+      className="section-full"
       style={{
         backgroundColor: explore.bg,
         color: explore.textColor,
@@ -34,55 +36,43 @@ export default function SliderSection() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        paddingTop: "8rem",
-        paddingBottom: "4rem",
-        overflow: "hidden",
+        padding: "10rem 0 6rem",
       }}
     >
-      {/* Heading */}
-      <div style={{ padding: "0 4rem", marginBottom: "6rem" }}>
+      {/* Heading — fills width */}
+      <div style={{ padding: "0 5%", marginBottom: "6rem" }}>
         <SplitText
           lines={explore.heading}
           as="h2"
-          className="heading-h2"
-          staggerDelay={0.06}
+          className="text-hero"
+          staggerDelay={0.08}
         />
       </div>
 
       {/* Horizontal drag slider */}
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "100vw",
-          overflow: "hidden",
-        }}
-      >
+      <div className="slider-viewport">
         <div
           ref={trackRef}
-          className="no-scrollbar"
+          className="slider-track"
           style={{
-            display: "flex",
-            overflowX: "auto",
             cursor: isDragging ? "grabbing" : "grab",
-            touchAction: "pan-y",
-            userSelect: "none",
-            gap: "2rem",
-            paddingLeft: "4rem",
-            paddingRight: "4rem",
           }}
           {...handlers}
         >
           {explore.items.map((item, i) => (
-            <div
+            <motion.div
               key={item.label}
               className="slider-item"
-              style={{
-                flex: "0 0 21rem",
-                height: "30rem",
-                opacity: inView ? 1 : 0,
-                transform: inView ? "none" : "translateY(20px)",
-                transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
+              initial={{ opacity: 0, y: 30 }}
+              animate={
+                inView
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 30 }
+              }
+              transition={{
+                duration: 0.5,
+                ease: [0.16, 1, 0.3, 1],
+                delay: i * 0.08,
               }}
             >
               <Card
@@ -92,7 +82,7 @@ export default function SliderSection() {
                 bg={item.bg}
                 textColor={item.textColor}
               />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

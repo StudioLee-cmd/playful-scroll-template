@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import AgeGate from "@/components/AgeGate";
 import HeroSection from "@/components/HeroSection";
 import SliderSection from "@/components/SliderSection";
 import ScrollRevealSection from "@/components/ScrollRevealSection";
@@ -8,34 +9,39 @@ import { siteConfig } from "@/lib/site-config";
 
 export default function Home() {
   return (
-    <main>
-      <Header />
+    <>
+      {/* Age gate overlay — first thing visitors see */}
+      <AgeGate />
 
-      {/* Section 1: Hero — "I'm fly! / Let me show you where we can go" */}
-      <HeroSection />
+      <main>
+        <Header />
 
-      {/* Section 2: Explore slider — "Let's explore your options" */}
-      <SliderSection />
+        {/* Section 1: Hero */}
+        <HeroSection />
 
-      {/* Section 3+4: Scroll reveal sections — sticky parallax with product panels */}
-      {siteConfig.scrollSections.map((section, i) => (
-        <ScrollRevealSection
-          key={i}
-          previewText={section.previewText}
-          heading={section.heading}
-          bg={section.bg}
-          textColor={section.textColor}
-          characterImage={section.characterImage}
-          products={section.products}
-          shopAllHref={section.shopAllHref}
-        />
-      ))}
+        {/* Section 2: Explore slider */}
+        <SliderSection />
 
-      {/* Section 5: Bottom — "Wherever you want to go / Flying papers is your ticket" */}
-      <BottomSection />
+        {/* Sections 3 & 4: Scroll reveal (sticky parallax) */}
+        {siteConfig.scrollSections.map((section, i) => (
+          <ScrollRevealSection
+            key={i}
+            previewText={section.previewText}
+            heading={section.heading}
+            bg={section.bg}
+            textColor={section.textColor}
+            characterImage={section.characterImage}
+            products={section.products}
+            shopAllHref={section.shopAllHref}
+          />
+        ))}
 
-      {/* Section 6: Footer promo slider + credits */}
-      <FooterSlider />
-    </main>
+        {/* Section 5: Bottom */}
+        <BottomSection />
+
+        {/* Section 6: Footer */}
+        <FooterSlider />
+      </main>
+    </>
   );
 }

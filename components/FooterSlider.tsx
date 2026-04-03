@@ -1,82 +1,75 @@
 "use client";
 
 import { useRef } from "react";
+import { motion } from "framer-motion";
 import Card from "./Card";
 import { useDragSlider } from "@/hooks/useDragSlider";
 import { useInView } from "@/hooks/useScrollProgress";
-import SplitText from "./SplitText";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * FooterSlider — Bottom section with promo cards in a horizontal slider
- * + "Thanks for flying with us" footer text.
+ * FooterSlider — Section 6: Promo cards + footer.
  *
- * Matches Flying Papers' footer layout:
- * - Colored background
- * - Horizontal drag slider with 3 promo cards (rotated slightly on mobile)
- * - Footer text at bottom
+ * Flying Papers layout:
+ * - Red background
+ * - Horizontal slider with 3 promotional cards (tilted on mobile)
+ * - "Thanks for flying with us" in display text at bottom
+ * - Brand name + copyright
  */
 
 export default function FooterSlider() {
-  const { footer } = siteConfig;
+  const { footer, name } = siteConfig;
   const sectionRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(sectionRef, 0.1);
+  const inView = useInView(sectionRef, 0.05);
   const { trackRef, isDragging, handlers } = useDragSlider();
 
   return (
     <section
       ref={sectionRef}
+      className="section-full"
       style={{
         backgroundColor: footer.bg,
         color: footer.textColor,
-        paddingTop: "8rem",
-        paddingBottom: "4rem",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        padding: "10rem 0 4rem",
       }}
     >
       {/* Promo cards slider */}
       <div
-        style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "100vw",
-          overflow: "hidden",
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-        }}
+        className="slider-viewport"
+        style={{ flex: 1, display: "flex", alignItems: "center" }}
       >
         <div
           ref={trackRef}
-          className="no-scrollbar"
+          className="slider-track"
           style={{
-            display: "flex",
-            overflowX: "auto",
             cursor: isDragging ? "grabbing" : "grab",
-            touchAction: "pan-y",
-            userSelect: "none",
             gap: "3rem",
-            paddingLeft: "4rem",
-            paddingRight: "4rem",
-            width: "100%",
           }}
           {...handlers}
         >
           {footer.cards.map((card, i) => {
-            // On mobile, cards are slightly rotated like Flying Papers
-            const rotations = [0, -10, 5];
+            const rotations = [0, -8, 4];
             return (
-              <div
+              <motion.div
                 key={card.title}
                 style={{
                   flex: "0 0 28rem",
-                  height: "38rem",
-                  opacity: inView ? 1 : 0,
-                  transform: inView ? "none" : `translateY(30px) rotate(${rotations[i] || 0}deg)`,
-                  transition: `opacity 0.6s ease ${i * 0.12}s, transform 0.6s ease ${i * 0.12}s`,
+                  height: "40rem",
+                }}
+                initial={{ opacity: 0, y: 40, rotate: rotations[i] || 0 }}
+                animate={
+                  inView
+                    ? { opacity: 1, y: 0, rotate: 0 }
+                    : { opacity: 0, y: 40, rotate: rotations[i] || 0 }
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: i * 0.1,
                 }}
               >
                 <Card
@@ -88,25 +81,17 @@ export default function FooterSlider() {
                   bg={card.bg}
                   textColor={card.textColor}
                 />
-              </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
 
       {/* Footer text */}
-      <div
-        style={{
-          textAlign: "center",
-          padding: "6rem 4rem 2rem",
-        }}
-      >
-        <SplitText
-          lines={[[footer.bottomText]]}
-          as="h3"
-          className="heading-h4"
-          staggerDelay={0.06}
-        />
+      <div style={{ textAlign: "center", padding: "6rem 5% 2rem" }}>
+        <div className="display-text text-sub" style={{ justifyContent: "center" }}>
+          {footer.bottomText}
+        </div>
 
         <div
           style={{
@@ -114,14 +99,15 @@ export default function FooterSlider() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            padding: "0 2rem",
           }}
         >
-          <p className="text-small" style={{ opacity: 0.6 }}>
-            {siteConfig.name}
-          </p>
-          <p className="text-small" style={{ opacity: 0.6 }}>
+          <span className="text-small" style={{ opacity: 0.5 }}>
+            {name}
+          </span>
+          <span className="text-small" style={{ opacity: 0.5 }}>
             &copy; {new Date().getFullYear()}
-          </p>
+          </span>
         </div>
       </div>
     </section>

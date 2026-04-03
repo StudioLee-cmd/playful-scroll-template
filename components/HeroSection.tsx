@@ -1,105 +1,107 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
 import SplitText from "./SplitText";
-import FloatingCharacter from "./FloatingCharacter";
+import CharacterSpot from "./CharacterSpot";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * HeroSection — First section of the page.
+ * HeroSection — Section 1.
  *
- * Structure (matches Flying Papers):
- * 1. Sticky container that pins while you scroll through
- * 2. Small eyebrow heading ("I'm fly!") that fades in first
- * 3. Large main heading ("Let me show you where we can go") with split-text animation
- * 4. Floating character illustration that bounces gently
- * 5. As you scroll, heading translates up and character slides down to reveal next section
+ * Layout from Flying Papers:
+ * - Cream background, full viewport sticky section
+ * - Small eyebrow heading at top ("I'm fly!")
+ * - Large heading filling width ("Let me show you where we can go")
+ * - Character floating below/between text
+ * - Scroll drives: heading up, character down, all fades out
+ * - Spacer is 300vh (200vh on desktop) for scroll length
  */
 
 export default function HeroSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(containerRef);
+  const ref = useRef<HTMLDivElement>(null);
+  const progress = useScrollProgress(ref);
   const { hero } = siteConfig;
-
-  // Scroll-driven transforms
-  const headingY = progress * -60; // heading moves up as you scroll
-  const characterY = progress * 100; // character moves down
-  const eyebrowOpacity = Math.max(0, 1 - progress * 3);
-  const headingOpacity = Math.max(0, 1 - progress * 2);
 
   return (
     <section
+      className="section-full"
       style={{
-        paddingTop: 0,
-        paddingBottom: 0,
         backgroundColor: hero.bg,
         color: hero.textColor,
       }}
     >
-      <div ref={containerRef} className="sticky-section__spacer">
-        <div className="sticky-section__inner" style={{ flexDirection: "column" }}>
-          {/* Eyebrow — small heading */}
+      <div
+        ref={ref}
+        className="sticky-wrap"
+        style={{ minHeight: "280vh" }}
+      >
+        <div
+          className="sticky-inner"
+          style={{
+            flexDirection: "column",
+            gap: 0,
+            backgroundColor: hero.bg,
+          }}
+        >
+          {/* Eyebrow — small text above */}
           <div
             style={{
               position: "absolute",
-              top: "15%",
+              top: "12%",
               left: "50%",
               transform: "translateX(-50%)",
-              opacity: eyebrowOpacity,
+              opacity: Math.max(0, 1 - progress * 4),
               zIndex: 2,
             }}
           >
             <SplitText
               lines={[hero.eyebrow]}
               as="h3"
-              className="heading-h3"
-              staggerDelay={0.08}
+              className="text-section"
+              staggerDelay={0.1}
             />
           </div>
 
-          {/* Main heading */}
-          <motion.div
+          {/* Main heading — fills viewport width */}
+          <div
             style={{
-              position: "relative",
-              zIndex: 2,
-              transform: `translateY(${headingY}%)`,
-              opacity: headingOpacity,
-              width: "100%",
+              width: "92%",
+              maxWidth: "1400px",
               textAlign: "center",
+              zIndex: 2,
+              transform: `translateY(${progress * -40}%)`,
+              opacity: Math.max(0, 1 - progress * 2.5),
             }}
           >
             <SplitText
               lines={hero.heading}
               as="h2"
-              className="heading-h2"
-              staggerDelay={0.04}
+              className="text-hero"
+              staggerDelay={0.03}
             />
-          </motion.div>
+          </div>
 
-          {/* Floating character */}
-          {hero.characterImage && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                left: "50%",
-                transform: `translateX(-50%) translateY(${characterY}%)`,
-                opacity: Math.max(0, 1 - progress * 4),
-                zIndex: 1,
-                width: "clamp(15rem, 30vw, 40rem)",
-              }}
-            >
-              <FloatingCharacter
-                src={hero.characterImage}
-                alt={`${siteConfig.name} character`}
-              />
-            </div>
-          )}
+          {/* Character — positioned below heading */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8%",
+              left: "50%",
+              transform: `translateX(-50%) translateY(${progress * 120}%)`,
+              opacity: Math.max(0, 1 - progress * 3),
+              zIndex: 1,
+              width: "clamp(12rem, 22vw, 30rem)",
+            }}
+          >
+            <CharacterSpot
+              src={hero.characterImage}
+              size={250}
+              color={hero.textColor}
+            />
+          </div>
 
-          {/* Dot pattern overlay */}
-          <div className="dot-pattern" style={{ opacity: 0.04 }} />
+          <div className="dot-pattern" />
         </div>
       </div>
     </section>
